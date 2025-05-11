@@ -34,7 +34,6 @@ IGNORED_KEYS = {"default", "script", "default value"}
 def translate_text(text):
     cleaned = normalize(text)
 
-    # Игнорируем системные ключи
     if cleaned.lower() in IGNORED_KEYS:
         print(f"[🚫 IGNORE] '{text}' → '{text}'")
         return text
@@ -43,16 +42,12 @@ def translate_text(text):
         if normalize(key) == cleaned:
             print(f"[✔️ MANUAL] '{text}' == '{key}' → '{val}'")
             return val
-        else:
-            print(f"[❌ MISS] '{normalize(key)}' ≠ '{cleaned}'")
 
-    # Автогенерированный словарь
     for key, val in AUTO_DICT.items():
         if normalize(key) == cleaned:
             print(f"[🧠 AUTO] '{text}' → '{val}'")
             return val
 
-    # Машинный перевод
     translated = translator.translate(text)
     print(f"[⚠️  AI   ] '{text}' → '{translated}'")
     append_to_auto_dict(AUTO_DICT_PATH, text.strip(), translated.strip())
